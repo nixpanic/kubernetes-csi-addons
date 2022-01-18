@@ -10,6 +10,7 @@ jobs:
   build_bundle:
     name: build_bundle
     runs-on: ubuntu-latest
+    environment: ci
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -36,6 +37,7 @@ jobs:
   build_controller:
     name: build_controller
     runs-on: ubuntu-latest
+    environment: ci
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -51,13 +53,14 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: ${{ secrets.BUILD_PLATFORMS }}
           push: false
           tags: quay.io/csiaddons/k8s-controller:latest
 
   build_sidecar:
     name: build_sidecar
     runs-on: ubuntu-latest
+    environment: ci
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -73,6 +76,6 @@ jobs:
         with:
           context: .
           file: build/Containerfile.sidecar
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: ${{ secrets.BUILD_PLATFORMS }}
           push: false
           tags: quay.io/csiaddons/k8s-sidecar:latest
