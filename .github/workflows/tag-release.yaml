@@ -101,7 +101,8 @@ jobs:
 
   publish_release:
     name: Publish a release based on the tag
-    if: github.repository == 'csi-addons/kubernetes-csi-addons' && github.ref_type  == 'tag'
+    #if: github.repository == 'csi-addons/kubernetes-csi-addons' && github.ref_type  == 'tag'
+    if: github.ref_type  == 'tag'
     runs-on: ubuntu-latest
     permissions:
       contents: write
