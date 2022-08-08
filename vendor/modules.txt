@@ -332,6 +332,13 @@ github.com/google/certificate-transparency-go/jsonclient
 github.com/google/certificate-transparency-go/tls
 github.com/google/certificate-transparency-go/x509
 github.com/google/certificate-transparency-go/x509/pkix
+# github.com/google/gnostic v0.5.7-v3refs
+## explicit; go 1.12
+github.com/google/gnostic/compiler
+github.com/google/gnostic/extensions
+github.com/google/gnostic/jsonschema
+github.com/google/gnostic/openapiv2
+github.com/google/gnostic/openapiv3
 # github.com/google/go-cmp v0.5.6
 ## explicit; go 1.8
 github.com/google/go-cmp/cmp
@@ -727,8 +734,8 @@ github.com/spf13/afero/mem
 # github.com/spf13/cast v1.3.1
 ## explicit
 github.com/spf13/cast
-# github.com/spf13/cobra v1.2.1
-## explicit; go 1.14
+# github.com/spf13/cobra v1.4.0
+## explicit; go 1.15
 github.com/spf13/cobra
 # github.com/spf13/jwalterweatherman v1.1.0
 ## explicit
@@ -761,8 +768,8 @@ github.com/xeipuuv/gojsonreference
 # github.com/xeipuuv/gojsonschema v1.2.0
 ## explicit
 github.com/xeipuuv/gojsonschema
-# github.com/xlab/treeprint v0.0.0-20181112141820-a009c3971eca
-## explicit
+# github.com/xlab/treeprint v1.1.0
+## explicit; go 1.13
 github.com/xlab/treeprint
 # github.com/zmap/zcrypto v0.0.0-20200911161511-43ff0ea04f21
 ## explicit; go 1.13
@@ -907,7 +914,7 @@ golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/modfile
 golang.org/x/mod/module
 golang.org/x/mod/semver
-# golang.org/x/net v0.0.0-20211209124913-491a49abca63
+# golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd
 ## explicit; go 1.17
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
@@ -935,18 +942,19 @@ golang.org/x/oauth2/jwt
 ## explicit
 golang.org/x/sync/errgroup
 golang.org/x/sync/semaphore
-# golang.org/x/sys v0.0.0-20211029165221-6e7872819dc8
+# golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e
 ## explicit; go 1.17
 golang.org/x/sys/execabs
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/plan9
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b
+# golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
 ## explicit; go 1.17
 golang.org/x/term
 # golang.org/x/text v0.3.7
 ## explicit; go 1.17
+golang.org/x/text/cases
 golang.org/x/text/encoding
 golang.org/x/text/encoding/charmap
 golang.org/x/text/encoding/htmlindex
@@ -957,6 +965,7 @@ golang.org/x/text/encoding/korean
 golang.org/x/text/encoding/simplifiedchinese
 golang.org/x/text/encoding/traditionalchinese
 golang.org/x/text/encoding/unicode
+golang.org/x/text/internal
 golang.org/x/text/internal/language
 golang.org/x/text/internal/language/compact
 golang.org/x/text/internal/tag
@@ -1062,8 +1071,8 @@ google.golang.org/grpc/serviceconfig
 google.golang.org/grpc/stats
 google.golang.org/grpc/status
 google.golang.org/grpc/tap
-# google.golang.org/protobuf v1.27.1
-## explicit; go 1.9
+# google.golang.org/protobuf v1.28.0
+## explicit; go 1.11
 google.golang.org/protobuf/encoding/protojson
 google.golang.org/protobuf/encoding/prototext
 google.golang.org/protobuf/encoding/protowire
@@ -1449,7 +1458,7 @@ k8s.io/component-base/version
 # k8s.io/klog/v2 v2.40.1
 ## explicit; go 1.13
 k8s.io/klog/v2
-# k8s.io/kube-openapi v0.0.0-20211115234752-e816edb12b65
+# k8s.io/kube-openapi v0.0.0-20220401212409-b28bf2818661
 ## explicit; go 1.16
 k8s.io/kube-openapi/pkg/util/proto
 k8s.io/kube-openapi/pkg/util/proto/validation
@@ -1470,7 +1479,7 @@ k8s.io/kubectl/pkg/util/slice
 k8s.io/kubectl/pkg/util/templates
 k8s.io/kubectl/pkg/util/term
 k8s.io/kubectl/pkg/validation
-# k8s.io/utils v0.0.0-20210930125809-cb0fa318a74b
+# k8s.io/utils v0.0.0-20220210201930-3a6ce19ff2f9
 ## explicit; go 1.12
 k8s.io/utils/buffer
 k8s.io/utils/clock
@@ -1614,9 +1623,8 @@ sigs.k8s.io/kubebuilder/v3/pkg/plugins/golang/v3/scaffolds/internal/templates
 sigs.k8s.io/kubebuilder/v3/pkg/plugins/golang/v3/scaffolds/internal/templates/api
 sigs.k8s.io/kubebuilder/v3/pkg/plugins/golang/v3/scaffolds/internal/templates/controllers
 sigs.k8s.io/kubebuilder/v3/pkg/plugins/golang/v3/scaffolds/internal/templates/hack
-# sigs.k8s.io/kustomize/api v0.10.1
-## explicit; go 1.16
-sigs.k8s.io/kustomize/api/builtins
+# sigs.k8s.io/kustomize/api v0.12.1
+## explicit; go 1.18
 sigs.k8s.io/kustomize/api/filesys
 sigs.k8s.io/kustomize/api/filters/annotations
 sigs.k8s.io/kustomize/api/filters/fieldspec
@@ -1629,15 +1637,17 @@ sigs.k8s.io/kustomize/api/filters/nameref
 sigs.k8s.io/kustomize/api/filters/namespace
 sigs.k8s.io/kustomize/api/filters/patchjson6902
 sigs.k8s.io/kustomize/api/filters/patchstrategicmerge
-sigs.k8s.io/kustomize/api/filters/prefixsuffix
+sigs.k8s.io/kustomize/api/filters/prefix
 sigs.k8s.io/kustomize/api/filters/refvar
 sigs.k8s.io/kustomize/api/filters/replacement
 sigs.k8s.io/kustomize/api/filters/replicacount
+sigs.k8s.io/kustomize/api/filters/suffix
 sigs.k8s.io/kustomize/api/filters/valueadd
 sigs.k8s.io/kustomize/api/hasher
 sigs.k8s.io/kustomize/api/ifc
 sigs.k8s.io/kustomize/api/image
 sigs.k8s.io/kustomize/api/internal/accumulator
+sigs.k8s.io/kustomize/api/internal/builtins
 sigs.k8s.io/kustomize/api/internal/generators
 sigs.k8s.io/kustomize/api/internal/git
 sigs.k8s.io/kustomize/api/internal/kusterr
@@ -1660,8 +1670,8 @@ sigs.k8s.io/kustomize/api/provider
 sigs.k8s.io/kustomize/api/resmap
 sigs.k8s.io/kustomize/api/resource
 sigs.k8s.io/kustomize/api/types
-# sigs.k8s.io/kustomize/cmd/config v0.10.2
-## explicit; go 1.16
+# sigs.k8s.io/kustomize/cmd/config v0.10.9
+## explicit; go 1.18
 sigs.k8s.io/kustomize/cmd/config/completion
 sigs.k8s.io/kustomize/cmd/config/configcobra
 sigs.k8s.io/kustomize/cmd/config/ext
@@ -1671,8 +1681,8 @@ sigs.k8s.io/kustomize/cmd/config/internal/generateddocs/api
 sigs.k8s.io/kustomize/cmd/config/internal/generateddocs/commands
 sigs.k8s.io/kustomize/cmd/config/internal/generateddocs/tutorials
 sigs.k8s.io/kustomize/cmd/config/runner
-# sigs.k8s.io/kustomize/kustomize/v4 v4.4.1
-## explicit; go 1.16
+# sigs.k8s.io/kustomize/kustomize/v4 v4.5.7
+## explicit; go 1.18
 sigs.k8s.io/kustomize/kustomize/v4
 sigs.k8s.io/kustomize/kustomize/v4/commands
 sigs.k8s.io/kustomize/kustomize/v4/commands/build
@@ -1689,8 +1699,8 @@ sigs.k8s.io/kustomize/kustomize/v4/commands/openapi
 sigs.k8s.io/kustomize/kustomize/v4/commands/openapi/fetch
 sigs.k8s.io/kustomize/kustomize/v4/commands/openapi/info
 sigs.k8s.io/kustomize/kustomize/v4/commands/version
-# sigs.k8s.io/kustomize/kyaml v0.13.0
-## explicit; go 1.16
+# sigs.k8s.io/kustomize/kyaml v0.13.9
+## explicit; go 1.18
 sigs.k8s.io/kustomize/kyaml/comments
 sigs.k8s.io/kustomize/kyaml/errors
 sigs.k8s.io/kustomize/kyaml/ext
@@ -1721,6 +1731,7 @@ sigs.k8s.io/kustomize/kyaml/sets
 sigs.k8s.io/kustomize/kyaml/setters2
 sigs.k8s.io/kustomize/kyaml/setters2/settersutil
 sigs.k8s.io/kustomize/kyaml/sliceutil
+sigs.k8s.io/kustomize/kyaml/utils
 sigs.k8s.io/kustomize/kyaml/yaml
 sigs.k8s.io/kustomize/kyaml/yaml/internal/k8sgen/pkg/labels
 sigs.k8s.io/kustomize/kyaml/yaml/internal/k8sgen/pkg/selection
