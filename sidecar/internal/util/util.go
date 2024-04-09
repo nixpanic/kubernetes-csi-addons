@@ -20,26 +20,24 @@ import (
 	"errors"
 	"fmt"
 	"net"
-	"strconv"
 )
 
 var ErrInvalidEndpoint = errors.New("invalid endpoint")
 
 // ValidateControllerEndpoint validates given ip address and port,
 // returning valid endpoint containing both ip address and port.
-func ValidateControllerEndpoint(rawIP, rawPort string) (string, error) {
+func ValidateControllerEndpoint(rawIP string, port int) (string, error) {
 	ip := net.ParseIP(rawIP)
 	if ip == nil {
 		return "", fmt.Errorf("%w: invalid controller ip address %q", ErrInvalidEndpoint, rawIP)
 	}
 
-	port, err := parsePort(rawPort)
-	if err != nil {
-		return "", err
-	}
-
 	if ip.To4() != nil {
 		return fmt.Sprintf("%s:%d", ip.String(), port), nil
+	}
+
+	if port <= 0 {
+		return "", fmt.Errorf("%w: invalid controller port %d", ErrInvalidEndpoint, port)
 	}
 
 	return fmt.Sprintf("[%s]:%d", ip.String(), port), nil
@@ -52,18 +50,17 @@ func ValidateControllerEndpoint(rawIP, rawPort string) (string, error) {
 //   - a ValidateControllerEndpoint() if rawIP is set
 //   - pod://<pod>:<port> if pod is set, and rawIP and namespace are not set
 //   - pod://<pod>.<namespace>:<port> if pod, namespace are set, and rawIP not
-func BuildEndpointURL(rawIP, rawPort, pod, namespace string) (string, error) {
+func BuildEndpointURL(rawIP string, port int, pod, namespace string) (string, error) {
 	if rawIP != "" {
-		return ValidateControllerEndpoint(rawIP, rawPort)
+		return ValidateControllerEndpoint(rawIP, port)
+	}
+
+	if port <= 0 {
+		return "", fmt.Errorf("%w: invalid controller port %d", ErrInvalidEndpoint, port)
 	}
 
 	if pod == "" && namespace == "" {
 		return "", fmt.Errorf("%w: missing IP-address or Pod and Namespace", ErrInvalidEndpoint)
-	}
-
-	port, err := parsePort(rawPort)
-	if err != nil {
-		return "", err
 	}
 
 	endpoint := "pod://" + pod
@@ -74,14 +71,4 @@ func BuildEndpointURL(rawIP, rawPort, pod, namespace string) (string, error) {
 	}
 
 	return endpoint + fmt.Sprintf(":%d", port), nil
-}
-
-// parsePort takes a network port as string and converts that to an integer.
-func parsePort(rawPort string) (uint64, error) {
-	port, err := strconv.ParseUint(rawPort, 10, 16)
-	if err != nil {
-		return 0, fmt.Errorf("%w: invalid controller port %q: %v", ErrInvalidEndpoint, rawPort, err)
-	}
-
-	return port, nil
 }

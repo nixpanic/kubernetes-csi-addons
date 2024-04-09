@@ -18,6 +18,7 @@ package server
 
 import (
 	"errors"
+	"fmt"
 	"net"
 
 	"google.golang.org/grpc"
@@ -46,7 +47,7 @@ type SidecarServer struct {
 // NewSidecarServer create a new SidecarServer on the given IP-address and
 // port. If the IP-address is an empty string, the server will listen on all
 // available IP-addresses. Only tcp ports are supported.
-func NewSidecarServer(ip, port string) *SidecarServer {
+func NewSidecarServer(ip string, port int) *SidecarServer {
 	ss := &SidecarServer{}
 
 	if ss.services == nil {
@@ -54,7 +55,7 @@ func NewSidecarServer(ip, port string) *SidecarServer {
 	}
 
 	ss.scheme = "tcp"
-	ss.endpoint = ip + ":" + port
+	ss.endpoint = fmt.Sprintf("%s:%d", ip, port)
 
 	return ss
 }

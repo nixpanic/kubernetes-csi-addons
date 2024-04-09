@@ -20,8 +20,8 @@ import "testing"
 
 func TestValidateControllerEndpoint(t *testing.T) {
 	type args struct {
-		rawIP   string
-		rawPort string
+		rawIP string
+		port  int
 	}
 	tests := []struct {
 		name    string
@@ -32,8 +32,8 @@ func TestValidateControllerEndpoint(t *testing.T) {
 		{
 			name: "valid ipv4",
 			args: args{
-				rawIP:   "192.168.61.228",
-				rawPort: "8080",
+				rawIP: "192.168.61.228",
+				port:  8080,
 			},
 			want:    "192.168.61.228:8080",
 			wantErr: false,
@@ -41,8 +41,8 @@ func TestValidateControllerEndpoint(t *testing.T) {
 		{
 			name: "valid ipv6",
 			args: args{
-				rawIP:   "2001:db8:3c4d:15:0:1:1a2f:1a2b",
-				rawPort: "8080",
+				rawIP: "2001:db8:3c4d:15:0:1:1a2f:1a2b",
+				port:  8080,
 			},
 			want:    "[2001:db8:3c4d:15:0:1:1a2f:1a2b]:8080",
 			wantErr: false,
@@ -50,8 +50,8 @@ func TestValidateControllerEndpoint(t *testing.T) {
 		{
 			name: "invalid ipv4",
 			args: args{
-				rawIP:   "192.168.61",
-				rawPort: "8080",
+				rawIP: "192.168.61",
+				port:  8080,
 			},
 			want:    "",
 			wantErr: true,
@@ -59,8 +59,8 @@ func TestValidateControllerEndpoint(t *testing.T) {
 		{
 			name: "invalid ipv6",
 			args: args{
-				rawIP:   "2001:db8:3c4d:15:0:1:1a2f",
-				rawPort: "8080",
+				rawIP: "2001:db8:3c4d:15:0:1:1a2f",
+				port:  8080,
 			},
 			want:    "",
 			wantErr: true,
@@ -68,8 +68,8 @@ func TestValidateControllerEndpoint(t *testing.T) {
 		{
 			name: "empty ip",
 			args: args{
-				rawIP:   "",
-				rawPort: "8080",
+				rawIP: "",
+				port:  8080,
 			},
 			want:    "",
 			wantErr: true,
@@ -77,8 +77,8 @@ func TestValidateControllerEndpoint(t *testing.T) {
 		{
 			name: "invalid port",
 			args: args{
-				rawIP:   "2001:db8:3c4d:15:0:1:1a2f:1a2b",
-				rawPort: "-123",
+				rawIP: "2001:db8:3c4d:15:0:1:1a2f:1a2b",
+				port:  -123,
 			},
 			want:    "",
 			wantErr: true,
@@ -86,7 +86,7 @@ func TestValidateControllerEndpoint(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ValidateControllerEndpoint(tt.args.rawIP, tt.args.rawPort)
+			got, err := ValidateControllerEndpoint(tt.args.rawIP, tt.args.port)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ValidateControllerEndpoint() error = %v, wantErr %v", err, tt.wantErr)
 				return

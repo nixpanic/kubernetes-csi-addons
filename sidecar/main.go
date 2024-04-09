@@ -43,10 +43,12 @@ func main() {
 		csiAddonsAddress   = flag.String("csi-addons-address", "/run/csi-addons/socket", "CSI Addons endopoint")
 		nodeID             = flag.String("node-id", "", "NodeID")
 		stagingPath        = flag.String("stagingpath", defaultStagingPath, "stagingpath")
-		controllerPort     = flag.String("controller-port", "",
+		controllerPort     = flag.Int("controller-port", 0,
 			"The TCP network port where the gRPC server for controller request, will listen (example: `8080`)")
 		controllerIP = flag.String("controller-ip", "",
 			"The TCP network ip address where the gRPC server for controller request, will listen (example: `192.168.61.228`)")
+		proxyPort = flag.Int("proxy-port", 0,
+			"The TCP port that is availble for outside connections to the gRPC server (example: `9070`)")
 		podName      = flag.String("pod", "", "name of the Pod that contains this sidecar")
 		podNamespace = flag.String("namespace", "", "namespace of the Pod that contains this sidecar")
 		podUID       = flag.String("pod-uid", "", "UID of the Pod that contains this sidecar")
@@ -70,7 +72,13 @@ func main() {
 		return
 	}
 
-	controllerEndpoint, err := sideutil.BuildEndpointURL(*controllerIP, *controllerPort, *podName, *podNamespace)
+	// if proxyPort is set, use that in the CSIAddonsNode.Endpoint URL
+	publicPort := *proxyPort
+	if publicPort == 0 {
+		publicPort = *controllerPort
+	}
+
+	controllerEndpoint, err := sideutil.BuildEndpointURL(*controllerIP, publicPort, *podName, *podNamespace)
 	if err != nil {
 		klog.Fatalf("Failed to validate controller endpoint: %v", err)
 	}
