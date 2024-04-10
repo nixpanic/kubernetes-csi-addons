@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/csi-addons/kubernetes-csi-addons/internal/kubernetes/token"
 	"github.com/csi-addons/kubernetes-csi-addons/internal/version"
 
 	"google.golang.org/grpc"
@@ -152,6 +153,8 @@ type grpcClient struct {
 func (g *grpcClient) Connect(endpoint string) {
 	conn, err := grpc.NewClient(
 		endpoint,
+		// FIXME: find namespace and serviceaccount-name
+		token.WithServiceAccountToken(getKubernetesClient(), "openshift-storage", "csi-addons-sa"),
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(fmt.Sprintf("failed to connect to %q: %v", endpoint, err))
