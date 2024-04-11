@@ -23,6 +23,7 @@ import (
 	authenticationv1 "k8s.io/api/authentication/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	"sigs.k8s.io/controller-runtime/pkg/log"
 )
 
 type tokenResolver struct {
@@ -46,8 +47,13 @@ func WithServiceAccountToken(kubeclient *kubernetes.Clientset, namespace, servic
 }
 
 func (tr *tokenResolver) addAuthorizationHeader(ctx context.Context, method string, req, reply any, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+	logger := log.FromContext(ctx)
+	logger.WithValues("Namespace", tr.namespace, "ServiceAccount", tr.serviceAccount)
+
 	token, err := tr.getToken(ctx)
 	if err != nil {
+		logger.Error(err, "failed to get token for ServiceAccount")
+
 		return err
 	}
 
