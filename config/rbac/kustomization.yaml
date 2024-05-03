@@ -28,3 +28,8 @@ resources:
   - auth_proxy_role.yaml
   - auth_proxy_role_binding.yaml
   - auth_proxy_client_clusterrole.yaml
+  # the manager passes the ServiceAccount token to the sidecars
+  - serviceaccount_token_role.yaml
+  - serviceaccount_token_role_binding.yaml
+  - non_resource_url_role.yaml
+  - non_resource_url_role_binding.yaml

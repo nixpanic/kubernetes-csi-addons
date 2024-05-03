@@ -1,0 +1,11 @@
+---
+# permissions to create a serviceaccount/token
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: serviceaccount-token-role
+rules:
+  - nonResourceURLs:
+      - "/"
+    verbs:
+      - upgrade
