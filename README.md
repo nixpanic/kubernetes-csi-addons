@@ -16,22 +16,29 @@ will watch for Kubernetes events (CRs) and relay operation initiated by the
 user to the CSI-driver.
 
 ```plaintext
-.------.   CR  .------------.
-| User |-------| CSI-Addons |
-'------'       | Controller |
-               '------------'
-                      |
-                      | gRPC
-                      |
-            .---------+------------------------------.
-            |         |                              |
-            |  .------------.        .------------.  |
-            |  | CSI-Addons |  gRPC  |    CSI     |  |
-            |  |  side-car  |--------| Controller |  |
-            |  '------------'        | NodePlugin |  |
-            |                        '------------'  |
-            | CSI-driver Pod                         |
-            '----------------------------------------'
+.------.   CR  .------------.             .----------------.
+| User |-------| CSI-Addons | . . . . . . |   Kubernetes   |
+'------'       | Controller |           . |   API-server   |
+               '------------'         .   |(ServiceAccount,|
+                      |             .     |     RBAC)      |
+             gRPC+TLS |           .       '----------------'
+                      |         .
+             .--------+-------.----------------------------.
+             |        |     .                              |
+             |  .-----------------.        .------------.  |
+             |  | kube-rbac-proxy |  gRPC  | CSI-Addons |  |
+             |  |    side-car     |--------|  side-car  |  |
+             |  '-----------------'        '------------'  |
+             |                                   |         |
+             |                                   | gRPC    |
+             |                                   |         |
+             |                             .------------.  |
+             |                             |    CSI     |  |
+             |                             | Controller |  |
+             |                             | NodePlugin |  |
+             |                             '------------'  |
+             | CSI-driver Pod                              |
+             '---------------------------------------------'
 ```
 
 A CSI-Addons side-car will be running in the CSI-driver (provisioner and
@@ -44,6 +51,21 @@ The CSI-driver side-car is located with the CSI-Controller (provisioner) and
 the CSI-nodeplugin containers. The side-car registers itself by creating a
 `CSIAddonsNode` CR that the CSI-Addons Controller can use to connect to the
 side-car and execute operations.
+
+### Authentication
+
+A `kube-rbac-proxy` sidecar is receiving the gRPC procedures from the
+CSI-Addons Controller. The proxy provides a TLS endpoint, with automatic
+certificate generation. Each connection that the CSI-Addons Controller makes to
+the CSI-driver contains a Token from a ServiceAccount that the proxy validates
+agains the Kubernetes TokenReview API. This ensures that the CSI-Addons
+Controller has permissions to execute the CSI-Addons procedures, and other
+clients connecting to the CSI-driver get rejected.
+
+#### Token Details and Role Base Access Control
+
+As part of the access review that is done on the Token, the permissions it
+grants should include a `nonResourceURL` and have the `csi-addons` Audience.
 
 ### `csi-addons` executable
 
@@ -63,6 +85,12 @@ request to one or more CSI-Addons side-cars for execution.
 By listing the `CSIAddonsNode` CRs, the CSI-Addons Controller knows how to
 connect to the side-cars. By checking the supported capabilities of the
 side-cars, it can decide where to execute operations that the user requested.
+
+### Authentication
+
+Every connection that the CSI-Addons Controller makes to a CSI-driver contains
+a Token from the ServiceAccount. The Token will then be validated by the
+`kube-rbac-proxy` that handles the incoming gRPC procedures.
 
 ### Installation
 
