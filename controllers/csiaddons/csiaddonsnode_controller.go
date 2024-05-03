@@ -32,6 +32,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/client-go/kubernetes"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
@@ -48,8 +49,9 @@ var (
 // CSIAddonsNodeReconciler reconciles a CSIAddonsNode object
 type CSIAddonsNodeReconciler struct {
 	client.Client
-	Scheme   *runtime.Scheme
-	ConnPool *connection.ConnectionPool
+	Scheme     *runtime.Scheme
+	ConnPool   *connection.ConnectionPool
+	KubeClient *kubernetes.Clientset
 }
 
 //+kubebuilder:rbac:groups=core,resources=pods,verbs=get;list;watch
@@ -119,7 +121,7 @@ func (r *CSIAddonsNodeReconciler) Reconcile(ctx context.Context, req ctrl.Reques
 	}
 
 	logger.Info("Connecting to sidecar")
-	newConn, err := connection.NewConnection(ctx, endPoint, nodeID, driverName, csiAddonsNode.Namespace, csiAddonsNode.Name)
+	newConn, err := connection.NewConnection(ctx, r.KubeClient, endPoint, nodeID, driverName, csiAddonsNode.Namespace, csiAddonsNode.Name)
 	if err != nil {
 		logger.Error(err, "Failed to establish connection with sidecar")
 

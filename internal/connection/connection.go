@@ -20,9 +20,11 @@ import (
 	"context"
 	"time"
 
+	"github.com/csi-addons/kubernetes-csi-addons/internal/kubernetes/token"
 	"github.com/csi-addons/spec/lib/go/identity"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"k8s.io/client-go/kubernetes"
 )
 
 // Connection struct consists of to NodeID, DriverName, Capabilities for the controller
@@ -39,10 +41,12 @@ type Connection struct {
 
 // NewConnection establishes connection with sidecar, fetches capability and returns Connection object
 // filled with required information.
-func NewConnection(ctx context.Context, endpoint, nodeID, driverName, namespace, podName string) (*Connection, error) {
+func NewConnection(ctx context.Context, kubeclient *kubernetes.Clientset, endpoint, nodeID, driverName, namespace, podName string) (*Connection, error) {
 	opts := []grpc.DialOption{
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithTransportCredentials(insecure.NewCredentials()), // TODO: needs to be credentials.NewTLS() ?
 		grpc.WithIdleTimeout(time.Duration(0)),
+		// FIXME: do not use a hard-coded namespace/serviceaccount
+		token.WithServiceAccountToken(kubeclient, "openshift-storage", "csi-addons-controller-manager"),
 	}
 	cc, err := grpc.NewClient(endpoint, opts...)
 	if err != nil {

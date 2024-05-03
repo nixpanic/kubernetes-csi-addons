@@ -146,9 +146,10 @@ func main() {
 		MaxConcurrentReconciles: cfg.MaxConcurrentReconciles,
 	}
 	if err = (&controllers.CSIAddonsNodeReconciler{
-		Client:   mgr.GetClient(),
-		Scheme:   mgr.GetScheme(),
-		ConnPool: connPool,
+		Client:     mgr.GetClient(),
+		Scheme:     mgr.GetScheme(),
+		ConnPool:   connPool,
+		KubeClient: kubeClient,
 	}).SetupWithManager(mgr, ctrlOptions); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "CSIAddonsNode")
 		os.Exit(1)
