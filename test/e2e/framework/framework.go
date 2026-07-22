@@ -125,37 +125,15 @@ func (f *Framework) setupNamespace() {
 		f.namespaceName = fmt.Sprintf("%s-%s", f.BaseName, uuid.NewString())
 	}
 
-	ns := &corev1.Namespace{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: f.namespaceName,
-			Labels: map[string]string{
-				"e2e-test":      "true",
-				"e2e-framework": f.BaseName,
-			},
-		},
-	}
-
 	ctx, cancel := context.WithTimeout(context.Background(), f.Config.Timeouts.OperationComplete)
 	defer cancel()
 
-	// Try to get existing namespace
-	existingNs := &corev1.Namespace{}
-	err := f.Client.Get(ctx, client.ObjectKey{Name: f.namespaceName}, existingNs)
-	if err == nil {
-		// Namespace exists, use it
-		f.Namespace = existingNs
-		ginkgo.By(fmt.Sprintf("Using existing namespace: %s", f.namespaceName))
-		return
-	}
-
-	if !apierrors.IsNotFound(err) {
-		gomega.Expect(err).NotTo(gomega.HaveOccurred(), "Failed to check for existing namespace")
-	}
-
 	// Create new namespace
 	err = f.Client.Create(ctx, ns)
-	gomega.Expect(err).NotTo(gomega.HaveOccurred(), "Failed to create namespace")
-	f.Namespace = ns
+	if !apierrors.IsAlreadyExists(err) {
+		gomega.Expect(err).NotTo(gomega.HaveOccurred(), "Failed to create namespace")
+	}
+	_ = f.Client.Get(ctx, client.ObjectKey{Name: f.namespaceName}, &f.Namespace)
 	ginkgo.By(fmt.Sprintf("Created namespace: %s", f.namespaceName))
 }
 
